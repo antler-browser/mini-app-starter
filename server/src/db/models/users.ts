@@ -98,3 +98,19 @@ export async function deleteAllUsers(db: Database): Promise<void> {
   await db.delete(users)
   console.log('✅ All users deleted')
 }
+
+/**
+ * Check if a user is an admin by DID
+ */
+export async function isUserAdmin(db: Database, did: string): Promise<boolean> {
+  const user = await getUserByDID(db, did)
+  return user?.isAdmin ?? false
+}
+
+/**
+ * Delete all non-admin users (for resetting events)
+ */
+export async function deleteNonAdminUsers(db: Database): Promise<void> {
+  await db.delete(users).where(eq(users.isAdmin, false))
+  console.log('✅ Non-admin users deleted')
+}

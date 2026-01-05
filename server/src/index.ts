@@ -1,5 +1,8 @@
 /**
- * Cloudflare Worker with WebSocket for real-time meetup user updates
+ * Cloudflare Worker with WebSocket for real-time user updates
+ *
+ * This is the main API entry point for the IRL Browser starter.
+ * Endpoints handle user profile management via JWT-verified requests.
  */
 
 import { Hono } from 'hono'
@@ -9,7 +12,7 @@ import type { Env } from './types'
 import { Broadcaster } from './durable-object'
 import { createDb } from './db/client'
 import * as UserModel from './db/models/users'
-import { decodeAndVerifyJWT } from '@meetup/shared'
+import { decodeAndVerifyJWT } from '@starter/shared'
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -106,7 +109,7 @@ app.post('/api/add-avatar', async (c) => {
 })
 
 /**
- * DELETE /api/remove-user - Remove user from meetup
+ * DELETE /api/remove-user - Remove user
  * Requires JWT verification to ensure user is removing themselves
  */
 app.delete('/api/remove-user', async (c) => {
@@ -151,6 +154,51 @@ app.get('/api/users', async (c) => {
     console.error('Error fetching users:', error)
     return c.json(
       { error: 'Failed to fetch users', message: (error as Error).message },
+      500
+    )
+  }
+})
+
+/**
+ * POST /api/reset - Reset event (admin only)
+ * Broadcasts reset message and clears all non-admin users
+ */
+app.post('/api/reset', async (c) => {
+  try {
+    const body = await c.req.json()
+    const { profileJwt, message } = body
+
+    if (!profileJwt) {
+      return c.json({ error: 'Missing profileJwt' }, 400)
+    }
+
+    if (!message || typeof message !== 'string') {
+      return c.json({ error: 'Missing or invalid message' }, 400)
+    }
+
+    // Verify and decode the JWT to get the user's DID
+    const payload = await decodeAndVerifyJWT(profileJwt)
+    const did = payload.iss
+
+    // Check if user is admin
+    const db = createDb(c.env.DB)
+    const isAdmin = await UserModel.isUserAdmin(db, did)
+
+    if (!isAdmin) {
+      return c.json({ error: 'Unauthorized: Admin access required' }, 403)
+    }
+
+    // Broadcast reset message to all connected clients
+    await notifyDO(c, 'reset', { message })
+
+    // Clear all non-admin users from database
+    await UserModel.deleteNonAdminUsers(db)
+
+    return c.json({ success: true })
+  } catch (error) {
+    console.error('Reset error:', error)
+    return c.json(
+      { error: 'Failed to reset', message: (error as Error).message },
       500
     )
   }

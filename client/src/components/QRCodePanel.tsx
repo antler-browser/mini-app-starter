@@ -4,23 +4,15 @@ interface QRCodePanelProps {
   url?: string;
 }
 
+/**
+ * QR Code Panel - Desktop only
+ * Displays a QR code for mobile users to scan and open the app
+ */
 export function QRCodePanel({ url }: QRCodePanelProps) {
   const qrUrl = url || window.location.href;
 
   return (
     <div className="hidden md:flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-8">
-      <div className="flex justify-center items-end mb-6 relative" style={{ width: '272px', height: '112px' }}>
-        <img
-          src="/antler-1.png"
-          alt="Antler"
-          className="absolute left-0 top-0 h-28 w-auto object-contain"
-        />
-        <img
-          src="/antler-2.png"
-          alt="Antler"
-          className="absolute right-0 top-0 h-28 w-auto object-contain"
-        />
-      </div>
       <div className="bg-white p-8 rounded-2xl shadow-xl">
         <QRCodeSVG
           value={qrUrl}

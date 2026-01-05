@@ -1,7 +1,7 @@
 /**
- * Alchemy Configuration for Meetup Mini-App
+ * Alchemy Configuration for IRL Browser Starter
  *
- * Deploys the meetup mini-app to Cloudflare:
+ * Deploys the starter mini-app to Cloudflare:
  * - D1 Database for user storage
  * - Durable Object for real-time WebSocket broadcasting
  * - Worker for API and static asset serving
@@ -13,13 +13,13 @@ import { CloudflareStateStore } from 'alchemy/state'
 import type { Broadcaster } from './server/src/durable-object'
 
 // Initialize Alchemy app with remote state store
-const app = await alchemy('meetup-irl', {
+const app = await alchemy('irl-starter', {
   stateStore: (scope) => new CloudflareStateStore(scope),
 })
 
 /**
  * D1 Database
- * Stores meetup attendee information
+ * Stores user information
  */
 const database = await D1Database('database', {
   name: `${app.name}-${app.stage}-db`,

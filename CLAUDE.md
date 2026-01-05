@@ -1,15 +1,15 @@
-# CLAUDE.md for Meetup Mini App
+# CLAUDE.md for IRL Browser Starter
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-An IRL Browser mini app for meetup check-ins with real-time attendee list. Uses `window.irlBrowser` API for profile access with JWT verification. This mini app is meant to run inside an IRL Browser like Antler. See `/docs/irl-browser-specification.md` for IRL Browser Specification specification.
+A starter template for building IRL Browser mini apps with Cloudflare Workers, D1, and Durable Objects. Uses `window.irlBrowser` API for profile access with JWT verification. Mini apps run inside an IRL Browser like Antler. See `/docs/irl-browser-specification.md` for IRL Browser Specification.
 
 **Project Structure**: This is a pnpm workspace monorepo with three packages:
 - `client/` - React frontend
 - `server/` - Cloudflare Workers, D1 (SQLite), Durable Objects
-- `shared/` - Shared utilities (JWT verification, Social links, etc.)
+- `shared/` - Shared utilities (JWT verification)
 
 ## Key Files and Directories
 
@@ -17,13 +17,11 @@ An IRL Browser mini app for meetup check-ins with real-time attendee list. Uses 
 - `/client/src/components/`: React components
   - `/QRCodePanel.tsx` - Shows a QR code for app. Hidden on mobile, visible on desktop.
   - `/Avatar.tsx` - Displays a user's avatar or placeholder if no avatar is set.
-  - `/UserList.tsx` - Real-time list of meetup users
-  - `/UserDetail.tsx` - Displays detailed user profile information when a user is selected
 - `/client/src/app.tsx` - Main component with IRL Browser integration and profile display
 - `/client/src/main.tsx` - Entry point that renders App (initializes IRL Browser Simulator in dev mode)
 - `/client/public/`: Public files
   - `irl-manifest.json` - Mini app IRL Browser manifest with metadata and requested permissions
-  - `antler-icon.webp` - Mini app icon
+  - `icon.webp` - Mini app icon
 - `/client/vite.config.ts` - Vite configuration with proxy to backend
 
 ### Server (`/server/`)
@@ -39,16 +37,13 @@ An IRL Browser mini app for meetup check-ins with real-time attendee list. Uses 
 
 ### Shared (`/shared/`)
 - `/shared/src/jwt.ts` - JWT decoding and verification utilities (`decodeAndVerifyJWT`, `decodeJWT`)
-- `/shared/src/social-links.ts` - Social links utilities (platform validation, handle normalization, URL generation)
 
 ### Root
 - `/docs/`: Documentation
-  - `irl-browser-specification.md` - IRL Browser Specification specification
+  - `irl-browser-specification.md` - IRL Browser Specification
 - `/scripts/`: Helper scripts
-  - `update-metadata.js` - Updates irl-manifest.json and index.html from data.json
   - `ensure-client-dist.js` - Ensures client build exists (runs before dev via predev hook)
   - `migrate-local.ts` - Database migration script for local development
-- `data.json` - Meetup metadata (title, description) used by update-metadata.js
 - `alchemy.run.ts` - Alchemy deployment configuration for Cloudflare Workers
 - `pnpm-workspace.yaml` - Workspace configuration
 - `.alchemy/state.json` - Tracks your infrastructure (created after first deployment)
@@ -96,9 +91,9 @@ The `pnpm run dev` command automatically runs a `predev` hook that executes `ens
 The server exposes the following REST and WebSocket endpoints:
 
 **REST Endpoints:**
-- `POST /api/add-user` - Add or update user profile (requires JWT in Authorization header)
-- `POST /api/add-avatar` - Add or update user avatar (requires JWT, accepts multipart/form-data)
-- `DELETE /api/remove-user` - Remove user from meetup (requires JWT in Authorization header)
+- `POST /api/add-user` - Add or update user profile (requires JWT)
+- `POST /api/add-avatar` - Add or update user avatar (requires JWT)
+- `DELETE /api/remove-user` - Remove user (requires JWT)
 - `GET /api/users` - Get all users from the database (public, no auth required)
 - `GET /api` - Root api endpoint - Used for health check
 
@@ -109,8 +104,8 @@ The server exposes the following REST and WebSocket endpoints:
 
 The app uses a **single Durable Object instance** (`idFromName: 'default'`) for WebSocket broadcasting:
 
-1. **Client connects**: WebSocket upgrade request → Worker → Durable Object
-2. **User checks in**: POST `/api/add-user` → Worker verifies JWT → Saves to D1 → Notifies DO
+1. **Client connects**: WebSocket upgrade request -> Worker -> Durable Object
+2. **User action**: POST endpoint -> Worker verifies JWT -> Saves to D1 -> Notifies DO
 3. **Broadcast**: Durable Object sends WebSocket message to all connected clients
 4. **Auto-eviction**: Cloudflare automatically evicts DO when all connections close
 
@@ -118,10 +113,10 @@ The app uses a **single Durable Object instance** (`idFromName: 'default'`) for 
 
 WebSocket message types are defined inline in `/server/src/durable-object.ts` and `/server/src/index.ts`.
 
-**Client ← Server**:
+**Client <- Server**:
 - `connected` - Initial connection confirmation
 - `user-joined` - New user or updated user profile
-- `user-left` - User removed from meetup
+- `user-left` - User removed
 
 ### JWT Verification Pipeline (`/shared/src/jwt.ts`)
 The shared package exports `decodeAndVerifyJWT` which is used by both client and server to verify cryptographically signed user data from the IRL Browser.
@@ -136,11 +131,22 @@ The shared package exports `decodeAndVerifyJWT` which is used by both client and
 
 **Key detail**: Uses @noble/curves library for signature verification. (Cannot use Web Crypto APIs as most mobile browsers don't support Ed25519 yet.)
 
-**Import**: Both client and server import from `@meetup/shared` workspace package.
+**Import**: Both client and server import from `@starter/shared` workspace package.
 
 ### Responsive Layout
 - **Mobile**: Single column, QR code hidden
 - **Desktop**: Two columns with QR code panel on left
+
+## Building Your App
+
+1. **Add tables** to `/server/src/db/schema.ts` alongside the existing `users` table
+2. **Create models** in `/server/src/db/models/` for CRUD operations
+3. **Add API endpoints** in `/server/src/index.ts` with JWT verification
+4. **Build UI components** in `/client/src/components/`
+5. **Wire up WebSocket events** for real-time updates
+6. **Update manifest** in `/client/public/irl-manifest.json` if needed
+
+Use the `/irl-browser` Claude Code command for guided scaffolding.
 
 ## Deployment with Alchemy
 
@@ -184,7 +190,7 @@ That's it! The simulator will:
 ### Client
 - **React** - UI framework
 - **Tailwind CSS** - Utility-first CSS framework
-- **qrcode.react** - QR code generation for meetup URLs
+- **qrcode.react** - QR code generation
 - **irl-browser-simulator** - IRL Browser debugging (dev only)
 - **Vite** - Build tool and dev server
 

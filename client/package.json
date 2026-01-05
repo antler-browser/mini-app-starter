@@ -1,5 +1,5 @@
 {
-  "name": "meetup-client",
+  "name": "starter-client",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@meetup/shared": "workspace:*",
-    "irl-browser-onboarding": "^1.2.0",
+    "@starter/shared": "workspace:*",
+    "irl-browser-onboarding": "^1.3.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"

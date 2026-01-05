@@ -1,40 +1,43 @@
-# Meetup Mini App
+# IRL Browser Starter
 
-A mini app built with Antler IRL Browser that displays a real-time list of attendees as they scan a QR code. Perfect for meetups and events.
+A starter template for building IRL Browser mini apps with Cloudflare Workers, D1, and Durable Objects.
 
-**Note:** This repository is built to deploy to Cloudflare. For self-hosting, see [meetup-self-hosted](https://github.com/antler-browser/meetup-self-hosted). We recommend using Cloudflare because it works on Cloudflare's free tier. 
+## Features
 
-## How It Works
+- **User Authentication** - JWT-verified profiles from IRL Browser
+- **Real-time Updates** - WebSocket broadcasting via Durable Objects
+- **SQLite Database** - Cloudflare D1 with Drizzle ORM
+- **Mobile-first UI** - React + Tailwind CSS
 
-1. User scans QR code with Antler IRL Browser
-2. Client requests profile from `window.irlBrowser.getProfileDetails()` API
-3. IRL Browser generates and signs JWT with profile details
-4. Server verifies JWT, stores user in D1 database
-5. Durable Object broadcasts update via WebSocket to all connected clients
-6. Real-time attendee list updates automatically
+## Quick Start
+
+```bash
+pnpm install              # Install dependencies
+pnpm db:migrate:dev       # Initialize local D1 database
+pnpm run dev              # Start development server
+```
+
+Open `http://localhost:5173` in your browser. The IRL Browser Simulator will auto-login with a test profile.
 
 ## Project Structure
 
 This is a pnpm workspace monorepo with three packages:
 - `client/` - React frontend
 - `server/` - Cloudflare Workers, D1 (SQLite), Durable Objects
-- `shared/` - JWT verification and utilities
+- `shared/` - JWT verification utilities
 
-## Run the app locally
+## Building Your App
 
-```bash
-pnpm install              # Install dependencies
-pnpm db:migrate:local     # Initialize local D1 database
-pnpm run dev              # Start development server
-```
+1. **Add tables** to `/server/src/db/schema.ts` alongside the existing `users` table
+2. **Generate migrations**: `pnpm db:generate`
+3. **Apply migrations**: `pnpm db:migrate:dev`
+4. **Add API endpoints** in `/server/src/index.ts` with JWT verification
+5. **Build UI components** in `/client/src/components/`
+6. **Wire up WebSocket events** for real-time updates
 
-**Optional:** Edit `data.json` to customize your meetup details (title, description, etc.)
+Use the `/irl-browser` Claude Code command for guided scaffolding.
 
-Open `http://localhost:5173` in your browser. The IRL Browser Simulator will auto-login with a test profile.
-
-**Note**: `http://localhost:8787` is your backend. It is mapped to `http://localhost:5173/api` for convenience.
-
-### Debugging with IRL Browser Simulator
+## Debugging with IRL Browser Simulator
 
 **Note:** The IRL Browser Simulator is a development-only tool. Never use in production.
 
@@ -61,11 +64,9 @@ This app deploys entirely to Cloudflare using:
 - **Cloudflare Durable Objects** for WebSocket broadcasting
 - **Alchemy SDK** for infrastructure-as-code
 
-> **Prerequisites:** 
+> **Prerequisites:**
 - Cloudflare account (free tier works!)
 - Alchemy CLI installed (`brew install alchemy`)
-
-**Note:** Alchemy stores the state of the deployment inside `.alchemy/state.json`. It is created after the first deployment. You can store this file locally, but we have added it to the `.gitignore` file to avoid committing it to the repository. We have configured Alchemy to store the state of the deployment inside a Cloudflare Durable Object, see `alchemy.run.ts` for more details.
 
 Configure Cloudflare API token in Alchemy (see [Alchemy CLI Documentation](https://alchemy.run/docs/cli/configuration)):
 ```bash
@@ -74,8 +75,20 @@ alchemy configure
 
 Copy `.env.example` to `.env` and update `ALCHEMY_STATE_TOKEN`. This is used to store the state of the deployment in a remote state store.
 
-
 To deploy the app:
 ```bash
 pnpm run deploy:cloudflare
 ```
+
+## API Endpoints
+
+- `POST /api/add-user` - Add or update user profile (requires JWT)
+- `POST /api/add-avatar` - Add or update user avatar (requires JWT)
+- `DELETE /api/remove-user` - Remove user (requires JWT)
+- `GET /api/users` - Get all users (public)
+- `GET /api/ws` - WebSocket connection for real-time updates
+
+## Documentation
+
+- [CLAUDE.md](./CLAUDE.md) - Development guide for Claude Code
+- [IRL Browser Specification](./docs/irl-browser-specification.md) - IRL Browser API reference
