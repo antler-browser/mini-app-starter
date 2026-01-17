@@ -1,7 +1,7 @@
 /**
  * Cloudflare Worker with WebSocket for real-time user updates
  *
- * This is the main API entry point for the IRL Browser starter.
+ * This is the main API entry point for the Local First Auth starter.
  * Endpoints handle user profile management via JWT-verified requests.
  */
 

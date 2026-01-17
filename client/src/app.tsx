@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { decodeAndVerifyJWT } from '@starter/shared'
-import { IrlOnboarding } from 'irl-browser-onboarding/react'
+import { Onboarding } from 'local-first-auth/react'
 import { QRCodePanel } from './components/QRCodePanel'
 import { AdminSection } from './components/AdminSection'
 import { Avatar } from './components/Avatar'
 
-// TypeScript declarations for IRL Browser API
+// TypeScript declarations for Local First Auth API
 declare global {
   interface Window {
-    irlBrowser?: {
+    localFirstAuth?: {
       getProfileDetails(): Promise<string>;
       getAvatar(): Promise<string | null>;
-      getBrowserDetails(): {
+      getAppDetails(): {
         name: string;
         version: string;
         platform: 'ios' | 'android' | 'browser';
@@ -35,12 +35,12 @@ export function App() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [needsOnboarding, setNeedsOnboarding] = useState(false)
+  const [_needsOnboarding, setNeedsOnboarding] = useState(false)
   const [isOnboardingModalOpen, setIsOnboardingModalOpen] = useState(false)
   const [resetMessage, setResetMessage] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
 
-  // Handler for when onboarding completes - now window.irlBrowser is available
+  // Handler for when onboarding completes - now window.localFirstAuth is available
   const handleOnboardingComplete = useCallback(() => {
     setIsOnboardingModalOpen(false)
     setNeedsOnboarding(false)
@@ -49,11 +49,11 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    // Check if window.irlBrowser is available
-    const hasIrlBrowser = !!window.irlBrowser
-    setNeedsOnboarding(!hasIrlBrowser)
+    // Check if window.localFirstAuth is available
+    const hasLocalFirstAuth = !!window.localFirstAuth
+    setNeedsOnboarding(!hasLocalFirstAuth)
 
-    if (hasIrlBrowser) {
+    if (hasLocalFirstAuth) {
       loadUser()
       loadAvatar()
     } else {
@@ -62,19 +62,19 @@ export function App() {
   }, [])
 
   const getProfileJwt = async (): Promise<string | undefined> => {
-    if (!window.irlBrowser) return undefined
-    return await window.irlBrowser.getProfileDetails()
+    if (!window.localFirstAuth) return undefined
+    return await window.localFirstAuth.getProfileDetails()
   }
 
   const loadUser = async () => {
     try {
-      if (!window.irlBrowser) {
+      if (!window.localFirstAuth) {
         setLoading(false)
         return
       }
 
       // Get profile details JWT
-      const profileJwt = await window.irlBrowser.getProfileDetails()
+      const profileJwt = await window.localFirstAuth.getProfileDetails()
 
       // Add user to database and get user with isAdmin
       const user = await addUserToDatabase(profileJwt)
@@ -90,9 +90,9 @@ export function App() {
 
   const loadAvatar = async () => {
     try {
-      if (!window.irlBrowser) return
+      if (!window.localFirstAuth) return
 
-      const avatarJWT = await window.irlBrowser.getAvatar()
+      const avatarJWT = await window.localFirstAuth.getAvatar()
       if (!avatarJWT) return
 
       await addAvatarToDatabase(avatarJWT)
@@ -245,7 +245,7 @@ export function App() {
               onClick={() => setIsOnboardingModalOpen(false)}
             />
             <div className="relative z-10 w-full max-w-lg mx-4 max-h-[90vh] overflow-auto rounded-2xl shadow-2xl">
-              <IrlOnboarding
+              <Onboarding
                 mode="choice"
                 onComplete={handleOnboardingComplete}
                 customStyles={{ primaryColor: '#403B51' }}

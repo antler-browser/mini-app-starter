@@ -1,5 +1,5 @@
 /**
- * Alchemy Configuration for IRL Browser Starter
+ * Alchemy Configuration for Local First Auth Starter
  *
  * Deploys the starter mini-app to Cloudflare:
  * - D1 Database for user storage

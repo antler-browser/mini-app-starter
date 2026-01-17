@@ -1,11 +1,11 @@
 {
-  "name": "irl-browser-starter",
+  "name": "mini-app-starter",
   "private": true,
-  "description": "A starter template for building IRL Browser mini apps with Cloudflare Workers, D1, and Durable Objects.",
+  "description": "A opinionated starter template for building small mini apps for you and your friends. Built using Local First Auth, Cloudflare Workers, D1, and Durable Objects.",
   "license": "MIT",
   "keywords": [
     "antler",
-    "irl-browser",
+    "local-first-auth",
     "cloudflare-workers",
     "d1",
     "durable-objects",

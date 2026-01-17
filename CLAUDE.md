@@ -1,10 +1,10 @@
-# CLAUDE.md for IRL Browser Starter
+# CLAUDE.md for Local First Auth Starter
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-A starter template for building IRL Browser mini apps with Cloudflare Workers, D1, and Durable Objects. Uses `window.irlBrowser` API for profile access with JWT verification. Mini apps run inside an IRL Browser like Antler. See `/docs/irl-browser-specification.md` for IRL Browser Specification.
+A starter template for building Local First Auth mini apps with Cloudflare Workers, D1, and Durable Objects. Uses `window.localFirstAuth` API for profile access with JWT verification. Mini apps run inside a Local First Auth-enabled app like Antler. See `/docs/local-first-auth-spec.md` for Local First Auth Specification.
 
 **Project Structure**: This is a pnpm workspace monorepo with three packages:
 - `client/` - React frontend
@@ -17,10 +17,10 @@ A starter template for building IRL Browser mini apps with Cloudflare Workers, D
 - `/client/src/components/`: React components
   - `/QRCodePanel.tsx` - Shows a QR code for app. Hidden on mobile, visible on desktop.
   - `/Avatar.tsx` - Displays a user's avatar or placeholder if no avatar is set.
-- `/client/src/app.tsx` - Main component with IRL Browser integration and profile display
-- `/client/src/main.tsx` - Entry point that renders App (initializes IRL Browser Simulator in dev mode)
+- `/client/src/app.tsx` - Main component with Local First Auth integration and profile display
+- `/client/src/main.tsx` - Entry point that renders App (initializes Local First Auth Simulator in dev mode)
 - `/client/public/`: Public files
-  - `irl-manifest.json` - Mini app IRL Browser manifest with metadata and requested permissions
+  - `local-first-auth-manifest.json` - Mini app Local First Auth manifest with metadata and requested permissions
   - `icon.webp` - Mini app icon
 - `/client/vite.config.ts` - Vite configuration with proxy to backend
 
@@ -40,7 +40,7 @@ A starter template for building IRL Browser mini apps with Cloudflare Workers, D
 
 ### Root
 - `/docs/`: Documentation
-  - `irl-browser-specification.md` - IRL Browser Specification
+  - `local-first-auth-spec.md` - Local First Auth Specification
 - `/scripts/`: Helper scripts
   - `ensure-client-dist.js` - Ensures client build exists (runs before dev via predev hook)
   - `migrate-local.ts` - Database migration script for local development
@@ -119,7 +119,7 @@ WebSocket message types are defined inline in `/server/src/durable-object.ts` an
 - `user-left` - User removed
 
 ### JWT Verification Pipeline (`/shared/src/jwt.ts`)
-The shared package exports `decodeAndVerifyJWT` which is used by both client and server to verify cryptographically signed user data from the IRL Browser.
+The shared package exports `decodeAndVerifyJWT` which is used by both client and server to verify cryptographically signed user data from Local First Auth.
 
 1. Decode JWT with `jwt-decode`
 2. Extract issuer DID from `iss` claim
@@ -144,9 +144,9 @@ The shared package exports `decodeAndVerifyJWT` which is used by both client and
 3. **Add API endpoints** in `/server/src/index.ts` with JWT verification
 4. **Build UI components** in `/client/src/components/`
 5. **Wire up WebSocket events** for real-time updates
-6. **Update manifest** in `/client/public/irl-manifest.json` if needed
+6. **Update manifest** in `/client/public/local-first-auth-manifest.json` if needed
 
-Use the `/irl-browser` Claude Code command for guided scaffolding.
+Use the `/local-first-auth` Claude Code command for guided scaffolding.
 
 ## Deployment with Alchemy
 
@@ -166,24 +166,24 @@ No manual migration steps needed - everything is handled by `alchemy.run.ts` con
 
 ## Development Workflow
 
-### Debugging IRL Browser Mini Apps
-The IRL Browser Simulator injects the `window.irlBrowser` API into a regular browser, allowing you to test your mini app locally without needing the Antler mobile app.
+### Debugging Local First Auth Mini Apps
+The Local First Auth Simulator injects the `window.localFirstAuth` API into a regular browser, allowing you to test your mini app locally without needing the Antler mobile app.
 
 **Note:** This is a development-only tool and should never be used in production.
 
 ```typescript
 if (import.meta.env.DEV) {
-  const simulator = await import('irl-browser-simulator')
-  simulator.enableIrlBrowserSimulator()
+  const simulator = await import('local-first-auth-simulator')
+  simulator.enableLocalFirstAuthSimulator()
 }
 ```
 
 That's it! The simulator will:
-- Inject `window.irlBrowser` into your page
+- Inject `window.localFirstAuth` into your page
 - Load a default test profile (Paul Morphy)
 - Show a floating debug panel
 - Click "Open as X" to open a new tab and simulate multiple users
-- Load a profile from the URL parameter `?irlProfile=<id>`
+- Load a profile from the URL parameter `?localFirstAuthProfile=<id>`
 
 ### Database Queries (for admins)
 
@@ -235,7 +235,8 @@ UPDATE users SET is_admin = 1 WHERE did = 'did:key:z...';
 - **React** - UI framework
 - **Tailwind CSS** - Utility-first CSS framework
 - **qrcode.react** - QR code generation
-- **irl-browser-simulator** - IRL Browser debugging (dev only)
+- **local-first-auth** - Authentication library, using the Local First Auth spec
+- **local-first-auth-simulator** - Local First Auth debugging (dev only)
 - **Vite** - Build tool and dev server
 
 ### Server
@@ -266,7 +267,7 @@ UPDATE users SET is_admin = 1 WHERE did = 'did:key:z...';
 - Audience claim mismatch (must match production URL)
 
 ### Profile Not Loading
-Check if API exists: `console.log(window.irlBrowser)`
+Check if API exists: `console.log(window.localFirstAuth)`
 
 ### Build Errors
 - Run `pnpm install`

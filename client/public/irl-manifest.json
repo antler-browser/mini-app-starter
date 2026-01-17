@@ -1,9 +1,0 @@
-{
-  "name": "IRL Browser Starter",
-  "description": "A starter template for building IRL Browser mini apps",
-  "icon": "./icon.webp",
-  "type": "app",
-  "permissions": [
-    "profile"
-  ]
-}
