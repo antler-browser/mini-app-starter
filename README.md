@@ -27,9 +27,9 @@ Before designing, ask me questions to clarify what I want to build.
 
 ### 2. Clone this repo, and install dependencies.
 ```bash
-git clone https://github.com/antler-browser/mini-app-starter.git
-cd mini-app-starter        # or your own app name
-pnpm install               # Install dependencies
+git clone https://github.com/antler-browser/mini-app-starter.git your-app-name
+cd your-app-name
+pnpm install    # Install dependencies
 ```
 
 This project uses pnpm as the package manager, if you don't have it installed, you can install it with `brew install pnpm`.
@@ -38,11 +38,33 @@ This project uses pnpm as the package manager, if you don't have it installed, y
 
 Open up Claude Code or a similar tool to create a technical implementation. Here is an example prompt for creating a technical implementation of the scavenger hunt mini app:
 ```
-Use this mockup as a reference:
+Create a technical implementation of the app based on this mockup: [[Attach mockup]]
 
-Look up examples to see if you can learn anything from them.
+Here are some key points to consider: [[Taken from conversation that created the mockup above]].
 
-Admin features to set up the app, and the ability to reset the app.
+**Core Mechanics:**
+- Each member hides their own QR code somewhere in the space
+- Members scan codes with native camera app
+- Finding your own code doesn't count toward your score (max 15 points)
+
+**Design Direction:**
+- Playful + minimal aesthetic
+
+**Screens Built:**
+- Home/Leaderboard — Main focus is the ranked leaderboard; personal progress card at top
+- User Detail — Tap any user to see which of the 16 QR codes they've found or not found (organized by who hid it)
+
+**Excluded:**
+- No time limit
+- No prizes
+- No activity feed
+- No easter eggs/achievements
+
+Look up examples of other mini apps inside `docs/mini-app-examples.md` to see if you can learn anything from them, bring them into your implementation.
+
+Lastly, I need some admin features to set up scavenger hunt.
+
+Ask me questions if you need to clarify anything.
 ```
 
 ### 4. Test your app locally.
