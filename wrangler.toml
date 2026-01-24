@@ -27,3 +27,7 @@ new_classes = ["Broadcaster"]
 # In production: Alchemy uploads these assets to Workers
 # [site]
 # bucket = "./client/dist"
+
+# Dev server configuration
+[dev]
+port = 8787
