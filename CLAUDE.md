@@ -93,6 +93,33 @@ pnpm run build:client     # Build only client package
 
 ---
 
+## Configuring a new project from this template
+
+- `wrangler.toml` - Wrangler configuration for local development (not used in production)
+- `alchemy.run.ts` - Alchemy configuration file defining the Cloudflare Worker, D1 database, and Durable Object bindings
+
+**Important:** When starting a new project from this template, update the following files with your app name:
+
+1. **`wrangler.toml`** - Update names for local development:
+
+```toml
+name = "your-app-name"                    # Worker name
+database_name = "your-app-name-db"        # D1 database name
+script_name = "your-app-name"             # In [[durable_objects.bindings]]
+```
+
+These names are used to identify your deployment and name Cloudflare resources (Worker, D1 database, etc.).
+
+2. **`alchemy.run.ts`** - Rename the app for production deployment:
+
+```typescript
+const app = await alchemy('your-app-name', {  // Change 'mini-app-starter' to your app name
+  stateStore: (scope) => new CloudflareStateStore(scope),
+})
+```
+
+---
+
 ## Architecture
 
 ### Authentication

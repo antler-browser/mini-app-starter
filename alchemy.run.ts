@@ -13,7 +13,7 @@ import { CloudflareStateStore } from 'alchemy/state'
 import type { Broadcaster } from './server/src/durable-object'
 
 // Initialize Alchemy app with remote state store
-const app = await alchemy('irl-starter', {
+const app = await alchemy('mini-app-starter', {
   stateStore: (scope) => new CloudflareStateStore(scope),
 })
 
