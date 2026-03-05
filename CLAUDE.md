@@ -100,7 +100,7 @@ pnpm run build:client     # Build only client package
 
 **When to run these steps:** When the user asks to "set up", "initialize", or "rename" this project.
 
-Run: `pnpm setup {app-name}` (defaults to current directory name). See [Project Setup docs](./docs/project-setup.md) for details.
+Run: `pnpm setup-project {app-name}` (defaults to current directory name). See [Project Setup docs](./docs/project-setup.md) for details.
 
 ---
 

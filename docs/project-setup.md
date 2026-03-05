@@ -7,7 +7,7 @@ This guide explains how to rename and configure the mini-app-starter template at
 Run the setup script with your app name in kebab-case:
 
 ```bash
-pnpm setup [app-name]
+pnpm setup-project [app-name]
 ```
 
 ## What the Script Does
