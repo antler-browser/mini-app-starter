@@ -46,8 +46,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       local-first-auth:
-        specifier: ^1.4.1
-        version: 1.4.1(react@19.2.1)
+        specifier: ^2.1.0
+        version: 2.1.0(react@19.2.1)
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@19.2.1)
@@ -2272,8 +2272,8 @@ packages:
     resolution: {integrity: sha512-snqAtrq90RXRil6p1Gej8WtdOFyodcdaG7X8N+PW25DntlPWzkLPVqt+VFsMM2F51vs5f8k/qskJM+qUXbjy6A==}
     engines: {node: '>=20.0.0'}
 
-  local-first-auth@1.4.1:
-    resolution: {integrity: sha512-5/kAi9JynQOh064qjiJL2Isyj/QDc9hqi2h96GhTFSZcPUDA0HUrV/HMeeXTkGzv0sBbd9lFAxFylvuyEDTr/g==}
+  local-first-auth@2.1.0:
+    resolution: {integrity: sha512-rjcytJ9ui+jPF6r+qArVcgGnEBe+pPXeQhhLgYuE0YfVSNAeZuG31r4lQ3wHIx2Ycl+ZG1y5Q0K8Uiu/9mCz+g==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
@@ -4832,7 +4832,7 @@ snapshots:
       base58-universal: 2.0.0
       base64-js: 1.5.1
 
-  local-first-auth@1.4.1(react@19.2.1):
+  local-first-auth@2.1.0(react@19.2.1):
     dependencies:
       '@stablelib/ed25519': 1.0.3
       base58-universal: 2.0.0
