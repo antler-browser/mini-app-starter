@@ -69,7 +69,6 @@ function Layout() {
           />
           <div className="relative z-10 w-full max-w-lg mx-4 max-h-[90vh] overflow-auto rounded-2xl shadow-2xl">
             <Onboarding
-              mode="choice"
               skipSocialStep={true}
               onComplete={handleOnboardingComplete}
             />
