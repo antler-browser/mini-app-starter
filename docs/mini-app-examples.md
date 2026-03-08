@@ -2,6 +2,22 @@
 
 Reference implementations to learn from when building your own mini apps.
 
+## sailing-club
+
+**[GitHub](https://github.com/antler-browser/sailing-club)**
+
+An equipment booking app for sailing clubs. Members can browse and book sailboats, kayaks, SUPs, and windsurf gear in 30-minute time slots with a real-time schedule view.
+
+**Learn from this:**
+- Add a script to import equipment data from a CSV file
+- Equipment/resource booking with time slots
+- Timezone support
+- Week and day navigation for scheduling
+- Database schema with multiple related tables (users, equipment, bookings)
+- Overlap detection for booking conflicts
+
+---
+
 ## meetup-cloudflare
 
 **[GitHub](https://github.com/antler-browser/meetup-cloudflare)**
