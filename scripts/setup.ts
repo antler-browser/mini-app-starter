@@ -76,12 +76,4 @@ manifest.description = `A ${titleName} mini app`
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
 console.log(manifestChanged ? `✅ local-first-auth-manifest.json updated` : `⏭️  local-first-auth-manifest.json (no changes needed)`)
 
-// 4. Remove git origin remote (points to mini-app-starter template repo)
-try {
-  execSync('git remote remove origin', { cwd: rootDir, stdio: 'ignore' })
-  console.log(`✅ previous git remote origin removed`)
-} catch {
-  console.log(`⏭️  previous git remote origin (already removed or not in a git repo)`)
-}
-
 console.log(`\n🎉 Setup complete! Your app is now "${appName}".`)

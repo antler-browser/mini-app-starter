@@ -25,9 +25,14 @@ Focus on the UI/visual design, not the app logic. Focus on mobile-first design. 
 Before designing, ask me questions to clarify what I want to build.
 ```
 
-### 2. Clone this repo, and install dependencies.
+### 2. Create your own copy of this repo and install dependencies.
+
+Click the "Use this template" button -> "Create a new repository" to create a new repo for your app.
+
+Then follow these steps below to download the repo locally and install dependencies.
+
 ```bash
-git clone https://github.com/antler-browser/mini-app-starter.git your-app-name
+git clone https://github.com/your-username/your-app-name.git your-app-name
 cd your-app-name
 pnpm install  # Install dependencies
 pnpm setup-project  # setup your app name inside wrangler.toml, alchemy.run.ts (See docs/project-setup.md)
