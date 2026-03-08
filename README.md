@@ -92,7 +92,7 @@ We use the Alchemy to easily deploy to Cloudflare. If you don't have it installe
 
 Configure a Cloudflare API token to use with Alchemy (see [Alchemy CLI Documentation](https://alchemy.run/docs/cli/configuration)):
 ```bash
-alchemy configure
+pnpm alchemy configure
 ```
 
 Copy `.env.example` to `.env` and update `ALCHEMY_STATE_TOKEN`. This is used to store the state of the deployment in a remote state store.
