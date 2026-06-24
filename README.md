@@ -12,20 +12,7 @@ This repo is a starter template to help you easily build and self-host your own 
 
 ## Getting Started
 
-### 1. Get a visual mockup of the app you want to build.
-
-For example, open up [claude.ai](https://claude.ai) and use the **frontend-design skill** to create a visual mockup of the app you want to build.
-
-Here is an example prompt for creating a scavenger hunt mini app for my coworking space:
-```
-Use the frontend design skill, I want to create a scavenger hunt mini app. This is for my coworking space, all 16 members will be given a QR code and asked to hide it somewhere in the space. We should show a leaderboard that displays everyone that has found a QR code. Our goal with the app is to have people at the coworking space have fun by looking around to find the hidden QR codes. 
-
-Focus on the UI/visual design, not the app logic. Focus on mobile-first design. Use placeholder data, mock profiles and avatars and mock states if needed. Skip signup/auth screens entirely. Skip QR scanning screens, we are going to use native camera app. 
-
-Before designing, ask me questions to clarify what I want to build.
-```
-
-### 2. Create your own copy of this repo and install dependencies.
+### 1. Create your own copy of this repo and install dependencies.
 
 Click the "Use this template" button -> "Create a new repository" to create a new repo for your app.
 
@@ -39,6 +26,19 @@ pnpm setup-project  # setup your app name inside wrangler.toml, alchemy.run.ts (
 ```
 
 This project uses pnpm as the package manager, if you don't have it installed, you can install it with `brew install pnpm`.
+
+### 2. Get a visual mockup of the app you want to build.
+
+For example, open up [claude.ai](https://claude.ai) and use the **frontend-design skill** to create a visual mockup of the app you want to build.
+
+Here is an example prompt for creating a scavenger hunt mini app for my coworking space:
+```
+Use the frontend design skill, I want to create a scavenger hunt mini app. This is for my coworking space, all 16 members will be given a QR code and asked to hide it somewhere in the space. We should show a leaderboard that displays everyone that has found a QR code. Our goal with the app is to have people at the coworking space have fun by looking around to find the hidden QR codes. 
+
+Focus on the UI/visual design, not the app logic. Focus on mobile-first design. Use placeholder data, mock profiles and avatars and mock states if needed. Skip signup/auth screens entirely. Skip QR scanning screens, we are going to use native camera app. 
+
+Before designing, ask me questions to clarify what I want to build.
+```
 
 ### 3. Create a technical implementation of your app based on the mockup.
 
